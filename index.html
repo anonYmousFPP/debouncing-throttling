@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+    <script>
+        function populateDiv(){
+            // alert("hi");
+            const a = document.getElementById("firstNum").value;
+            console.log(a);
+            const b = document.getElementById("secondNum").value;
+            console.log(b);
+            const element = document.getElementById("finalSum");
+            let temp;
+            function debouncingPopulateDiv(){
+                //throttling(backend)- when there are multiple call of debouncing function then the backend goes in callback hell.
+                // to avoid callback hell we use throttling i.e, it will clear the setTimeout if the call occur again before the time interval, we clear clear through throwttling(clearTimeout(setTimeout)).
+                clearTimeout(temp);
+
+                // Debouncing(frontend)- when we want multiple req call go to backend after a particular period of time(100ms).
+                temp = setTimeout(function(){
+                    populateDiv();
+                }, 100)
+            }
+
+            async function populateDiv(){
+                const x = await fetch("https://sum-server.100xdevs.com/sum?a="+a+"&b="+b);
+                const y = await x.text();
+                element.innerHTML = y;
+                console.log(y);
+            }          
+            debouncingPopulateDiv();  
+        }       
+    </script>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <input oninput="populateDiv()" id="firstNum" type="text" placeholder="First Number"></input>
+    </br>
+    </br>
+    <input oninput="populateDiv()" id="secondNum" type="text" placeholder="Second Number"></input>
+    <br>
+    <br>
+    <div id="finalSum"></div>
+
+</body>
+</html>
